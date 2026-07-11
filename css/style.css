@@ -19,6 +19,12 @@
   --text-dim: #94a3b8;
   --win-glow: #fbbf24;
   --bezel-grad: linear-gradient(160deg, #3d4a6e 0%, #1c2440 45%, #0e1428 100%);
+  /* Bahnschrift: Windows-native variable DIN (wdth axis via font-stretch);
+     falls back to Segoe/system at normal width elsewhere */
+  --font-machine: "Bahnschrift", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-impact: "Bahnschrift", Impact, "Arial Black", sans-serif;
+  --led-cyan: #7dd7f8;
+  --led-amber: #ffd66b;
 }
 
 html, body {
@@ -157,17 +163,25 @@ body.free-spins .bg-layer::after {
   padding: 4px 18px;
   border-radius: 999px;
   border: 1px solid rgba(99, 102, 241, 0.7);
-  background: linear-gradient(90deg, rgba(49, 46, 129, 0.9), rgba(88, 28, 135, 0.9));
-  box-shadow: 0 0 18px rgba(129, 140, 248, 0.5);
-  font-weight: 800;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.10), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0 1px, transparent 1px 3px),
+    linear-gradient(90deg, rgba(49, 46, 129, 0.92), rgba(88, 28, 135, 0.92));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -2px 5px rgba(0, 0, 0, 0.5),
+              0 0 18px rgba(129, 140, 248, 0.5), 0 4px 10px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-machine);
+  font-stretch: 87.5%;
+  font-weight: 700;
   letter-spacing: 0.08em;
   animation: fs-banner-pulse 1.6s ease-in-out infinite;
 }
 .fs-banner-count { font-size: 1.3em; color: var(--win-glow); }
 .fs-banner-mult { color: var(--teal); }
 @keyframes fs-banner-pulse {
-  0%, 100% { box-shadow: 0 0 12px rgba(129, 140, 248, 0.4); }
-  50% { box-shadow: 0 0 26px rgba(129, 140, 248, 0.85); }
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -2px 5px rgba(0, 0, 0, 0.5),
+             0 0 12px rgba(129, 140, 248, 0.4), 0 4px 10px rgba(0, 0, 0, 0.5); }
+  50% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -2px 5px rgba(0, 0, 0, 0.5),
+        0 0 26px rgba(129, 140, 248, 0.85), 0 4px 10px rgba(0, 0, 0, 0.5); }
 }
 
 /* ---------------- Reels ---------------- */
@@ -181,16 +195,23 @@ body.free-spins .bg-layer::after {
 }
 
 .reels-bezel {
+  position: relative;
   width: min(96vw, 720px);
   padding: clamp(6px, 1.4vw, 14px);
   border-radius: 18px;
-  background: var(--bezel-grad);
-  border: 1px solid var(--steel-edge);
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(148, 163, 184, 0.10), transparent 55%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 3px),
+    var(--bezel-grad);
+  border: 1px solid;
+  border-color: #5f6c96 #3a4460 #262e4a;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -3px 8px rgba(0, 0, 0, 0.6),
-    0 10px 40px rgba(0, 0, 0, 0.65),
-    0 0 40px rgba(56, 189, 248, 0.10);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 1px rgba(90, 104, 144, 0.35),
+    0 18px 44px rgba(0, 0, 0, 0.65),
+    0 2px 10px rgba(0, 0, 0, 0.5),
+    0 0 44px rgba(56, 189, 248, 0.10);
 }
 
 .reels {
@@ -322,122 +343,347 @@ body.free-spins .bg-layer::after {
 
 /* ---------------- Message bar ---------------- */
 
+/* Hex-ended annunciator display mounted between bezel and console deck */
 .message {
-  min-height: 1.6em;
-  font-size: clamp(0.85rem, 2.6vw, 1.15rem);
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  width: min(92vw, 520px);
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  isolation: isolate;
+  padding: 7px 40px;
+  clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0 50%);
+  background: linear-gradient(180deg, #4a5578 0%, #1a2340 45%, #39445f 100%);
+  font-family: var(--font-machine);
+  font-stretch: 87.5%;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 2.4vw, 1.05rem);
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
   text-transform: uppercase;
-  color: var(--text-dim);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
   text-align: center;
+  color: var(--text-dim);
+  transition: color 0.25s ease;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.35), 0 2px 3px rgba(0, 0, 0, 0.9);
 }
-.message.win-msg { color: var(--win-glow); text-shadow: 0 0 14px rgba(251, 191, 36, 0.7); }
-.message.fs-msg { color: var(--teal); text-shadow: 0 0 14px rgba(45, 212, 191, 0.7); }
+.message::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  clip-path: polygon(17px 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 17px 100%, 0 50%);
+  background:
+    repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.42) 0 5px, transparent 5px 11px) 10px center / 32px 100% no-repeat,
+    repeating-linear-gradient(-45deg, rgba(245, 158, 11, 0.42) 0 5px, transparent 5px 11px) calc(100% - 10px) center / 32px 100% no-repeat,
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0 1px, transparent 1px 3px),
+    radial-gradient(140% 120% at 50% 0%, rgba(56, 189, 248, 0.10), transparent 55%),
+    linear-gradient(180deg, #0a0f21, #060a16);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.85), inset 0 -1px 0 rgba(148, 163, 184, 0.10);
+}
+.message.win-msg { color: var(--win-glow); text-shadow: 0 0 14px rgba(251, 191, 36, 0.7), 0 2px 3px rgba(0, 0, 0, 0.9); }
+.message.fs-msg { color: var(--teal); text-shadow: 0 0 14px rgba(45, 212, 191, 0.7), 0 2px 3px rgba(0, 0, 0, 0.9); }
 
 /* ---------------- Controls ---------------- */
 
+/* Brushed-steel console deck.
+   Grid keeps the SPIN dial on the deck's true center axis: equal flexible
+   outer tracks (CREDITS / side keys), equal fixed inner tracks (BET / WIN). */
 .controls {
+  position: relative;
   width: min(96vw, 720px);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(96px, 1fr) 158px auto 158px minmax(96px, 1fr);
   align-items: stretch;
-  justify-content: center;
-  gap: clamp(6px, 1.4vw, 14px);
-  flex-wrap: wrap;
-  padding: clamp(8px, 1.4vw, 14px);
+  gap: clamp(10px, 1.6vw, 16px);
+  padding: clamp(12px, 1.8vw, 18px);
   border-radius: 16px;
-  background: var(--bezel-grad);
-  border: 1px solid var(--steel-edge);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 8px 30px rgba(0, 0, 0, 0.55);
+  border: 1px solid;
+  border-color: #5f6c96 #3a4460 #262e4a;
+  background:
+    radial-gradient(130% 100% at 50% 0%, rgba(148, 163, 184, 0.12), transparent 58%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 22%),
+    var(--bezel-grad);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 0 1px rgba(10, 14, 28, 0.6),
+    inset 0 -8px 14px -6px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(148, 163, 184, 0.10),
+    0 14px 34px rgba(0, 0, 0, 0.6),
+    0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
+/* Energy seam along the deck's top edge (absolute: .controls is a flex container) */
+.controls::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 26px;
+  right: 26px;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.75) 30%, rgba(56, 189, 248, 0.95) 50%, rgba(45, 212, 191, 0.75) 70%, transparent);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.55), 0 0 2px rgba(56, 189, 248, 0.9);
+  animation: seam-pulse 3.2s ease-in-out infinite;
+}
+@keyframes seam-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+/* Countersunk corner screws, shared with the reels bezel */
+.controls::after,
+.reels-bezel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.8;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, #93a0c2 18%, #4a5578 42%, #0b1020 62%, transparent 66%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, #93a0c2 18%, #4a5578 42%, #0b1020 62%, transparent 66%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, #93a0c2 18%, #4a5578 42%, #0b1020 62%, transparent 66%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, #93a0c2 18%, #4a5578 42%, #0b1020 62%, transparent 66%);
+  background-size: 7px 7px;
+  background-repeat: no-repeat;
+  background-position: 10px 10px, calc(100% - 10px) 10px, 10px calc(100% - 10px), calc(100% - 10px) calc(100% - 10px);
+}
+
+/* Recessed chamfered instrument glass: lip = element bg, glass = ::before (z -1) */
 .panel {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  min-width: 92px;
-  padding: 6px 12px;
-  border-radius: 10px;
-  background: rgba(6, 9, 19, 0.85);
-  border: 1px solid rgba(74, 85, 120, 0.55);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.7);
+  gap: 5px;
+  min-width: 96px;
+  min-height: 56px;
+  padding: 8px 16px 9px;
+  border: 0;
+  border-radius: 0;
+  clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+  background: linear-gradient(180deg, #10162c 0%, #2c3554 45%, #5a6890 100%);
 }
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  background:
+    linear-gradient(180deg, rgba(148, 163, 184, 0.10), transparent 30%),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0 1px, transparent 1px 3px),
+    radial-gradient(130% 100% at 50% 0%, var(--glass-tint, rgba(56, 189, 248, 0.07)), transparent 60%),
+    linear-gradient(180deg, #0b1124 0%, #070b18 100%);
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.85),
+    inset 0 12px 16px -10px rgba(0, 0, 0, 0.8),
+    inset 0 -1px 0 rgba(148, 163, 184, 0.08);
+}
+.panel-win { --glass-tint: rgba(251, 191, 36, 0.10); --led: var(--win-glow); }
+
 .panel-label {
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
-  color: var(--text-dim);
-  font-weight: 700;
+  font-family: var(--font-machine);
+  font-stretch: 87.5%;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: #8ea0c2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.panel-label::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: 1px;
+  background: var(--led, var(--cyan));
+  box-shadow: 0 0 6px var(--led, var(--cyan));
 }
 .panel-value {
-  font-size: clamp(1rem, 2.6vw, 1.35rem);
-  font-weight: 900;
-  color: var(--cyan);
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.55);
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-machine);
+  font-stretch: 75%;
+  font-size: clamp(1.35rem, 3.2vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--led-cyan);
+  text-shadow: 0 0 4px rgba(56, 189, 248, 0.9), 0 0 16px rgba(56, 189, 248, 0.45), 0 1px 0 rgba(0, 0, 0, 0.85);
+  font-variant-numeric: tabular-nums lining-nums;
 }
-.panel-win .panel-value { color: var(--win-glow); text-shadow: 0 0 10px rgba(251, 191, 36, 0.55); }
+.panel-win .panel-value { color: var(--led-amber); text-shadow: 0 0 4px rgba(251, 191, 36, 0.95), 0 0 16px rgba(251, 191, 36, 0.5), 0 1px 0 rgba(0, 0, 0, 0.85); }
 .panel-win .panel-value.counting { animation: win-count-pop 0.35s ease infinite alternate; }
 @keyframes win-count-pop {
   from { transform: scale(1); }
   to { transform: scale(1.08); }
 }
 
-.bet-row { display: flex; align-items: center; gap: 8px; }
+.panel-bet { min-width: 158px; }
+.bet-row { display: flex; align-items: center; gap: 10px; }
 
-/* Buttons */
+/* Buttons — each variant self-renders; base carries type + interaction only */
 .btn {
-  border: 1px solid var(--steel-edge);
-  border-radius: 10px;
-  background: linear-gradient(180deg, #3a4568 0%, #232c4c 55%, #161d38 100%);
+  border: 0;
+  background: transparent;
   color: var(--text-main);
-  font-weight: 800;
+  font-family: var(--font-machine);
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 3px 8px rgba(0, 0, 0, 0.55);
-  transition: transform 0.08s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  transition: transform 0.08s ease, filter 0.18s ease, box-shadow 0.18s ease;
   user-select: none;
 }
-.btn:hover:not(:disabled) { filter: brightness(1.18); }
-.btn:active:not(:disabled) { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 1px 3px rgba(0,0,0,0.55); }
+.btn:hover:not(:disabled) { filter: brightness(1.15); }
+.btn:active:not(:disabled) { transform: translateY(1px); }
 
+/* Bet steppers: lathe-turned metal caps */
 .btn-small {
-  width: 34px;
-  height: 34px;
-  font-size: 1.05rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.15rem;
   line-height: 1;
-  border-radius: 8px;
+  color: #bfe9ff;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.18), transparent 55%),
+    conic-gradient(from 220deg, #55618a, #232c4c 25%, #6b78a3 40%, #1d2544 60%, #55618a 75%, #2c3554 90%, #55618a);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.6),
+    0 0 0 1px #0a0f1e,
+    0 0 0 2px rgba(148, 163, 184, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.6);
 }
+.btn-small:active:not(:disabled) {
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7), 0 0 0 1px #0a0f1e, 0 0 0 2px rgba(148, 163, 184, 0.18);
+}
+.btn-small:disabled {  /* keep the metal, kill only the light */
+  opacity: 1;
+  filter: brightness(0.82) saturate(0.55);
+  color: rgba(191, 233, 255, 0.3);
+  text-shadow: none;
+}
+
+/* SPIN — teal ignition plate seated in a turned-metal collar (all pseudo, no wrapper:
+   JS rewrites this button's textContent) */
+@property --ring { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 
 .btn-spin {
-  min-width: clamp(96px, 16vw, 150px);
-  font-size: clamp(1rem, 2.8vw, 1.4rem);
-  padding: 10px 18px;
-  border-radius: 14px;
-  color: #06220f;
-  background: linear-gradient(180deg, #6ee7b7 0%, #10b981 45%, #047857 100%);
-  border-color: #34d399;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 16px rgba(16, 185, 129, 0.45);
+  position: relative;
+  isolation: isolate;
+  align-self: center;
+  width: clamp(98px, 13vw, 118px);
+  height: clamp(98px, 13vw, 118px);
+  min-width: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: none;
+  color: #03241f;
+  font-family: var(--font-impact);
+  font-stretch: 87.5%;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  text-shadow: 0 0 8px rgba(127, 242, 223, 0.7), 0 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 2px #060a16, 0 8px 18px rgba(0, 0, 0, 0.55), 0 0 26px rgba(45, 212, 191, 0.3);
+  animation: spin-breathe 2.6s ease-in-out infinite;
 }
-.btn-spin:hover:not(:disabled) { box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 24px rgba(16, 185, 129, 0.75); }
+.btn-spin::before {  /* turned-metal collar */
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: -2;
+  border-radius: 50%;
+  background: conic-gradient(from calc(var(--ring) + 210deg),
+    #9aa6c6, #39415e 12%, #b9c4e0 26%, #2c3452 40%, #8b97b8 55%,
+    #454f73 68%, #a4b0d0 82%, #39415e 92%, #9aa6c6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 1px rgba(0, 0, 0, 0.6),
+              0 1px 0 rgba(255, 255, 255, 0.07), 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+.btn-spin::after {  /* domed reactor-core face */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.25) 0%, transparent 20%),
+    radial-gradient(circle at 50% 45%, #5eead4 0%, #14b8a6 38%, #0d7f72 64%, #06423b 100%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -10px 16px rgba(2, 44, 40, 0.8),
+              inset 0 0 22px rgba(45, 212, 191, 0.55), inset 0 0 0 1px rgba(6, 95, 86, 0.9), 0 2px 0 #023a30;
+}
+.btn-spin:hover:not(:disabled) { filter: brightness(1.1); }
+.btn-spin:active:not(:disabled) { transform: translateY(2px); }
+.btn-spin:active:not(:disabled)::after {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -2px 6px rgba(2, 44, 40, 0.85),
+              inset 0 0 0 1px rgba(6, 95, 86, 0.9), 0 1px 0 #023a30;
+}
+.btn-spin:disabled { animation: none; filter: saturate(0.4) brightness(0.75); }
+
 .btn-spin.spinning {
-  color: #33112b;
-  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 45%, #b45309 100%);
-  border-color: #fbbf24;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 16px rgba(245, 158, 11, 0.5);
+  color: #3b1a05;
+  animation: spin-pulse 0.9s ease-in-out infinite;
+  box-shadow: 0 0 0 2px #060a16, 0 8px 18px rgba(0, 0, 0, 0.55), 0 0 26px rgba(245, 158, 11, 0.4);
+}
+.btn-spin.spinning::before { animation: ring-rotate 1.6s linear infinite; }
+.btn-spin.spinning::after {
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.25) 0%, transparent 20%),
+    radial-gradient(circle at 50% 45%, #fcd34d 0%, #f59e0b 38%, #b45309 64%, #6a2e0a 100%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -10px 16px rgba(90, 42, 3, 0.8),
+              inset 0 0 22px rgba(251, 191, 36, 0.5), inset 0 0 0 1px rgba(146, 64, 14, 0.9), 0 2px 0 #4a2404;
+}
+.btn-spin.spinning { text-shadow: 0 0 8px rgba(253, 230, 138, 0.7), 0 1px 1px rgba(0, 0, 0, 0.4); }
+.btn-spin.spinning:disabled { opacity: 1; filter: none; animation: spin-pulse 0.9s ease-in-out infinite; }
+
+@keyframes ring-rotate { to { --ring: 1turn; } }
+@keyframes spin-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
+@keyframes spin-breathe {
+  0%, 100% { box-shadow: 0 0 0 2px #060a16, 0 8px 18px rgba(0, 0, 0, 0.55), 0 0 18px rgba(45, 212, 191, 0.22); }
+  50% { box-shadow: 0 0 0 2px #060a16, 0 8px 18px rgba(0, 0, 0, 0.55), 0 0 34px rgba(45, 212, 191, 0.5); }
 }
 
-.side-buttons { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
-.btn-side { padding: 6px 14px; font-size: 0.72rem; border-radius: 8px; }
-.btn-side.active {
-  color: #052e2b;
-  background: linear-gradient(180deg, #5eead4 0%, #2dd4bf 50%, #0d9488 100%);
-  border-color: #2dd4bf;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 0 14px rgba(45, 212, 191, 0.55);
+.side-buttons { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+
+/* Graphite toggle keys with LED status bars — the LED carries the state */
+.btn-side {
+  position: relative;
+  padding: 7px 14px 11px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-stretch: 87.5%;
+  letter-spacing: 0.16em;
+  text-indent: 0.16em;
+  color: #c6d0e8;
+  background: linear-gradient(180deg, #38426a 0%, #232c4c 50%, #171e3a 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -2px 3px rgba(0, 0, 0, 0.5),
+              0 0 0 1px #0a0f1e, 0 2px 4px rgba(0, 0, 0, 0.5);
 }
+.btn-side::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 4px;
+  width: 22px;
+  height: 2px;
+  border-radius: 1px;
+  background: #3a4568;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-side.active {
+  color: #d8fff7;
+  box-shadow: inset 0 0 12px rgba(45, 212, 191, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18),
+              inset 0 -2px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(45, 212, 191, 0.6), 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.btn-side.active::after { background: var(--teal); box-shadow: 0 0 6px 1px rgba(45, 212, 191, 0.8); }
 .btn-side.off { color: var(--text-dim); filter: saturate(0.4); }
+.btn-side.off::after { background: var(--orange); box-shadow: 0 0 5px rgba(245, 158, 11, 0.6); }  /* amber caution LED */
 
 /* ---------------- Overlays ---------------- */
 
@@ -532,6 +778,9 @@ body.free-spins .bg-layer::after {
   display: flex;
   justify-content: flex-end;
 }
+/* RESET CREDITS is a momentary command key, not a toggle — no status LED */
+.modal-foot .btn-side { padding: 8px 16px; }
+.modal-foot .btn-side::after { display: none; }
 
 .pay-grid {
   display: grid;
@@ -579,24 +828,30 @@ body.free-spins .bg-layer::after {
 /* ---------------- Responsive ---------------- */
 
 @media (max-width: 640px) {
-  .controls { gap: 6px; }
+  .controls { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; gap: 10px; }
   .side-buttons { flex-direction: row; width: 100%; justify-content: center; }
-  .panel { min-width: 80px; padding: 4px 8px; }
-  .btn-spin { order: 5; width: 100%; padding: 12px; }
+  .panel { min-width: 80px; padding: 6px 10px 7px; }
+  /* hero dial stays round and centered on its own row */
+  .btn-spin { order: 5; width: clamp(88px, 26vw, 110px); height: clamp(88px, 26vw, 110px); margin-inline: auto; }
   .panel-balance { order: 1; flex: 1; }
-  .panel-bet { order: 2; flex: 1; }
+  .panel-bet { order: 2; flex: 1.6 1 0; min-width: 148px; }  /* bet caps must never clip */
   .panel-win { order: 3; flex: 1; }
-  .side-buttons { order: 4; }
+  .side-buttons { order: 6; }  /* utility rail below the hero */
+  .reels-bezel::after { display: none; }  /* bezel padding too tight for screws */
 }
 
 @media (max-width: 420px) {
   .app { padding: 4px 6px 14px; }
   .panel-label { font-size: 0.56rem; }
-  .btn-side { padding: 6px 10px; font-size: 0.66rem; }
+  .btn-side { padding: 6px 10px 10px; font-size: 0.66rem; }
+  .btn-small { width: 30px; height: 30px; font-size: 1rem; }
+  .bet-row { gap: 6px; }
   .modal-body { padding: 10px 12px; }
 }
 
 /* Reduced motion (accessibility) */
 @media (prefers-reduced-motion: reduce) {
-  .lightning, .reel.spinning .cell, .fs-banner { animation: none; }
+  .lightning, .reel.spinning .cell, .fs-banner,
+  .controls::before, .btn-spin, .btn-spin.spinning,
+  .btn-spin.spinning::before { animation: none; }
 }
