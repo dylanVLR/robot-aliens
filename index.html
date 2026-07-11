@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKYBOUND PROTOCOL</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Background layers: gradient (CSS) < background.png < bg_loop.mp4 (JS-injected) -->
+  <div id="bg-layer" class="bg-layer" aria-hidden="true">
+    <img id="bg-image" class="bg-image" alt="">
+    <div class="bg-vignette"></div>
+    <div id="lightning" class="lightning"></div>
+  </div>
+
+  <div id="app" class="app">
+
+    <header class="header">
+      <div class="logo-wrap">
+        <img id="logo-img" class="logo-img" alt="SKYBOUND PROTOCOL">
+        <h1 id="logo-text" class="logo-text"><span>SKYBOUND</span> <em>PROTOCOL</em></h1>
+      </div>
+      <div id="fs-banner" class="fs-banner hidden" role="status">
+        <span class="fs-banner-label">FREE SPINS</span>
+        <span id="fs-count" class="fs-banner-count">8</span>
+        <span class="fs-banner-mult">ALL WINS ×2</span>
+      </div>
+    </header>
+
+    <main class="machine">
+      <div class="reels-bezel">
+        <div id="reels" class="reels">
+          <!-- 5 reels x 3 cells built by JS -->
+          <svg id="lines-overlay" class="lines-overlay" viewBox="0 0 500 300" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </div>
+      </div>
+
+      <div id="message" class="message" role="status">SPIN TO ENGAGE</div>
+
+      <div class="controls">
+        <div class="panel panel-balance">
+          <span class="panel-label">CREDITS</span>
+          <span id="balance" class="panel-value">5000</span>
+        </div>
+
+        <div class="panel panel-bet">
+          <span class="panel-label">TOTAL BET</span>
+          <div class="bet-row">
+            <button id="bet-minus" class="btn btn-small" type="button" aria-label="Decrease bet">−</button>
+            <span id="bet-value" class="panel-value">10</span>
+            <button id="bet-plus" class="btn btn-small" type="button" aria-label="Increase bet">+</button>
+          </div>
+        </div>
+
+        <button id="spin-btn" class="btn btn-spin" type="button">SPIN</button>
+
+        <div class="panel panel-win">
+          <span class="panel-label">WIN</span>
+          <span id="win-value" class="panel-value">0</span>
+        </div>
+
+        <div class="side-buttons">
+          <button id="auto-btn" class="btn btn-side" type="button" aria-pressed="false">AUTO</button>
+          <button id="mute-btn" class="btn btn-side" type="button" aria-pressed="false">SOUND</button>
+          <button id="paytable-btn" class="btn btn-side" type="button">INFO</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Big win overlay -->
+    <div id="bigwin-overlay" class="overlay hidden" role="dialog" aria-label="Big win">
+      <div class="bigwin-box">
+        <div class="bigwin-title">COLOSSAL WIN</div>
+        <div id="bigwin-amount" class="bigwin-amount">0</div>
+        <div class="bigwin-sub">MAXIMUM POWER</div>
+      </div>
+    </div>
+
+    <!-- Free spins intro overlay -->
+    <div id="fs-overlay" class="overlay hidden" role="dialog" aria-label="Free spins awarded">
+      <div class="fs-box">
+        <div class="fs-title">STORM PROTOCOL</div>
+        <div id="fs-awarded" class="fs-amount">8 FREE SPINS</div>
+        <div class="fs-sub">ALL WINS ×2</div>
+      </div>
+    </div>
+
+    <!-- Paytable modal -->
+    <div id="paytable-modal" class="overlay modal hidden" role="dialog" aria-modal="true" aria-label="Paytable">
+      <div class="modal-box">
+        <div class="modal-head">
+          <h2>PAYTABLE</h2>
+          <button id="paytable-close" class="btn btn-small" type="button" aria-label="Close">✕</button>
+        </div>
+        <div id="paytable-body" class="modal-body">
+          <!-- built by JS -->
+        </div>
+        <div class="modal-foot">
+          <button id="reset-credits" class="btn btn-side" type="button">RESET CREDITS</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
