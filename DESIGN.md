@@ -6,11 +6,11 @@ kinetic Energon-era comic aesthetic. **Do NOT use any Hasbro/Skybound IP**: no c
 names (Optimus, Megatron, etc.), no faction logos, no "Transformers" wordmark anywhere
 in art prompts, code, or UI. All characters below are original.
 
-Original cast:
-- **AERION** — azure/silver sky sentinel (hero, top symbol)
-- **VOLTRIX** — crimson/orange storm-charger
-- **NIMBUS** — ivory/gold cloud carrier
-- **RAZORWING** — violet/black interceptor (villain)
+Original cast (renamed 2026-07-11; internal ids/filenames keep the old stems):
+- **AETHERON** — azure/silver sky sentinel (hero, top symbol) — id `AER`, symbol_aerion.png
+- **PYRAXIS** — crimson/orange storm-charger — id `VOL`, symbol_voltrix.png
+- **SERAPHEX** — ivory/gold cloud carrier — id `NIM`, symbol_nimbus.png
+- **DUSKRAZOR** — violet/black interceptor (villain) — id `RAZ`, symbol_razorwing.png
 
 ## File layout (project root = this folder)
 ```

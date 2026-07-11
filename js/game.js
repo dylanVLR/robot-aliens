@@ -25,6 +25,7 @@
   var BG_IMAGE_PATH = 'assets/images/background.png';
   var LOGO_PATH = 'assets/images/logo.png';
   var BG_VIDEO_PATH = 'assets/video/bg_loop.mp4';
+  var BG_VIDEO_PP_PATH = 'assets/video/bg_loop_pingpong.webm';
 
   var AUDIO_PATHS = {
     click:     'assets/audio/sfx_click.mp3',
@@ -43,10 +44,10 @@
    * Symbols, paytable, paylines, reel strips
    * -------------------------------------------------------- */
   var SYMBOLS = {
-    AER: { name: 'AERION',     color: '#38bdf8', color2: '#c0d8e8', pays: [25, 100, 500], robot: true  },
-    VOL: { name: 'VOLTRIX',    color: '#ef4444', color2: '#fb923c', pays: [20, 75, 300],  robot: true  },
-    NIM: { name: 'NIMBUS',     color: '#fbbf24', color2: '#fdf6e3', pays: [15, 50, 200],  robot: true  },
-    RAZ: { name: 'RAZORWING',  color: '#a855f7', color2: '#3b3547', pays: [15, 50, 200],  robot: true  },
+    AER: { name: 'AETHERON',   color: '#38bdf8', color2: '#c0d8e8', pays: [25, 100, 500], robot: true  },
+    VOL: { name: 'PYRAXIS',    color: '#ef4444', color2: '#fb923c', pays: [20, 75, 300],  robot: true  },
+    NIM: { name: 'SERAPHEX',   color: '#fbbf24', color2: '#fdf6e3', pays: [15, 50, 200],  robot: true  },
+    RAZ: { name: 'DUSKRAZOR',  color: '#a855f7', color2: '#3b3547', pays: [15, 50, 200],  robot: true  },
     CRY: { name: 'CRYSTAL',    color: '#22d3ee', color2: '#a5f3fc', pays: [10, 30, 100],  robot: false },
     GEA: { name: 'GEAR',       color: '#f59e0b', color2: '#fcd34d', pays: [5, 15, 60],    robot: false },
     WIN: { name: 'WINGS',      color: '#cbd5e1', color2: '#94a3b8', pays: [5, 15, 60],    robot: false },
@@ -237,10 +238,53 @@
     probe.onerror = function () { /* CSS gradient remains */ };
     probe.src = BG_IMAGE_PATH;
 
-    // Optional looping video layer above the still image.
-    // The clip's last frame doesn't match its first, so a native loop shows a
-    // hard cut. Two stacked players alternate instead: shortly before one ends,
-    // the other restarts from frame 0 and crossfades in over it.
+    // Video layer above the still image. Preferred source: the build-time
+    // ping-pong file (forward then reversed, so first frame == last frame and
+    // a native loop is seamless). If it's missing, fall back to the original
+    // one-way clip with two stacked players crossfading before each end.
+    function initPingPong(onFail) {
+      try {
+        var ppv = document.createElement('video');
+        ppv.muted = true;
+        ppv.loop = true;
+        ppv.autoplay = true;
+        ppv.preload = 'auto';
+        ppv.setAttribute('muted', '');
+        ppv.setAttribute('autoplay', '');
+        ppv.setAttribute('playsinline', '');
+        ppv.playsInline = true;
+        ppv.className = 'bg-video';
+        var ppFailed = false;
+        var ppFail = function () {
+          if (ppFailed) { return; }
+          ppFailed = true;
+          if (ppv.parentNode) { ppv.parentNode.removeChild(ppv); }
+          onFail();
+        };
+        ppv.addEventListener('error', ppFail);
+        var ppSrc = document.createElement('source');
+        ppSrc.src = BG_VIDEO_PP_PATH;
+        ppSrc.type = 'video/webm';
+        ppSrc.addEventListener('error', ppFail);
+        ppv.appendChild(ppSrc);
+        ppv.addEventListener('canplay', function () {
+          ppv.classList.add('visible');
+          var p = ppv.play();
+          if (p && typeof p.catch === 'function') { p.catch(function () {}); }
+        });
+        // keep rolling if an energy saver pauses muted background video
+        setInterval(function () {
+          if (document.visibilityState && document.visibilityState !== 'visible') { return; }
+          if (ppv.parentNode && !ppFailed && ppv.paused && ppv.readyState >= 2) {
+            var p2 = ppv.play();
+            if (p2 && typeof p2.catch === 'function') { p2.catch(function () {}); }
+          }
+        }, 1200);
+        $('bg-layer').insertBefore(ppv, $('lightning'));
+      } catch (e) { onFail(); }
+    }
+
+    function initCrossfade() {
     try {
       var FADE_LEAD = 1.25;   // seconds before clip end to begin the crossfade
                               // (must exceed the .bg-video opacity transition)
@@ -334,6 +378,9 @@
       layer.insertBefore(vids[1], $('lightning'));
       vids[1].load();
     } catch (e) { /* video unsupported — layers below take over */ }
+    }
+
+    initPingPong(initCrossfade);
   }
 
   function initLogo() {
@@ -543,7 +590,7 @@
       grid[0][0] = 'SCT'; grid[2][1] = 'SCT'; grid[4][2] = 'SCT';
       state.forced = null;
     } else if (state.forced === 'bigwin') {
-      // Deterministic: 5-of-a-kind AERION across the middle line (payline 1)
+      // Deterministic: 5-of-a-kind AETHERON across the middle line (payline 1)
       for (var i = 0; i < REELS; i++) {
         grid[i][1] = 'AER';
         if (grid[i][0] === 'SCT') { grid[i][0] = 'THR'; }

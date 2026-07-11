@@ -3,84 +3,28 @@
         "ok":  true,
         "source":  "gemini-3.1-flash-image",
         "file":  "symbol_aerion.png",
-        "bytes":  2031463,
+        "bytes":  2128957,
         "note":  ""
     },
     {
         "ok":  true,
         "source":  "gemini-3.1-flash-image",
         "file":  "symbol_voltrix.png",
-        "bytes":  2100937,
+        "bytes":  1680662,
         "note":  ""
     },
     {
         "ok":  true,
         "source":  "gemini-3.1-flash-image",
         "file":  "symbol_nimbus.png",
-        "bytes":  1834925,
+        "bytes":  1867728,
         "note":  ""
     },
     {
         "ok":  true,
         "source":  "gemini-3.1-flash-image",
         "file":  "symbol_razorwing.png",
-        "bytes":  1837903,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "symbol_crystal.png",
-        "bytes":  1793711,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "symbol_gear.png",
-        "bytes":  1831072,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "symbol_wings.png",
-        "bytes":  1550441,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "symbol_thruster.png",
-        "bytes":  1618042,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "symbol_wild.png",
-        "bytes":  1762915,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "symbol_scatter.png",
-        "bytes":  2022834,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "background.png",
-        "bytes":  2149484,
-        "note":  ""
-    },
-    {
-        "ok":  true,
-        "source":  "gemini-3.1-flash-image",
-        "file":  "logo.png",
-        "bytes":  1404959,
+        "bytes":  1942665,
         "note":  ""
     }
 ]
